@@ -362,20 +362,46 @@
 
   <!-- ENSEIGNANTS -->
   <section class="teachers" id="enseignants">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="eyebrow">Espace enseignants</span>
-        <h2>Nos livrables du hackathon.</h2>
-        <p>Accès réservé à l'équipe pédagogique. Remplacez les liens ci-dessous par vos documents (Moodle, Drive partagé…).</p>
-      </div>
-      <div class="doc-row reveal">
-        <a class="doc" href="docs/Livrable1_Gestion_de_projet_Equipe1.pdf" aria-label="Livrable 1"><span class="dot">01</span> Livrable 1</a>
-        <a class="doc" href="#" aria-label="Livrable 2"><span class="dot">02</span> Gestion de l'information</a>
-        <a class="doc" href="#" aria-label="Veilles"><span class="dot">03</span> Veilles &amp; stratégie</a>
-        <a class="doc" href="#" aria-label="Soutenance"><span class="dot">04</span> Support de soutenance</a>
-      </div>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Espace enseignants</span>
+      <h2>Nos livrables du hackathon.</h2>
+      <p>Accès réservé à l'équipe pédagogique. Entrez le mot de passe pour télécharger les documents.</p>
     </div>
-  </section>
+
+    <!-- zone mot de passe -->
+    <div class="reveal" id="pwZone" style="margin-top:34px;max-width:420px">
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <input id="pwInput" type="password" placeholder="Mot de passe enseignant"
+          style="flex:1;min-width:200px;font-family:inherit;font-size:15px;
+          padding:12px 16px;border:1.5px solid var(--line);border-radius:999px;
+          background:rgba(242,237,225,.08);color:var(--paper);outline:none"/>
+        <button onclick="checkPw()"
+          style="background:var(--leaf);color:var(--paper);border:0;border-radius:999px;
+          padding:12px 22px;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer">
+          Accéder
+        </button>
+      </div>
+      <p id="pwMsg" style="margin-top:10px;font-size:14px;color:#e07070;min-height:18px"></p>
+    </div>
+
+    <!-- livrables (cachés jusqu'au bon mot de passe) -->
+    <div class="doc-row reveal" id="docRow" style="display:none;margin-top:34px">
+      <a class="doc" href="docs/Livrable1_Gestion_de_projet_Equipe1.pdf" download>
+        <span class="dot">01</span> Gestion de projet
+      </a>
+      <a class="doc" href="docs/Livrable2.pdf" download>
+        <span class="dot">02</span> Gestion de l'information
+      </a>
+      <a class="doc" href="docs/Livrable3.pdf" download>
+        <span class="dot">03</span> Veilles &amp; stratégie
+      </a>
+      <a class="doc" href="docs/Livrable4.pdf" download>
+        <span class="dot">04</span> Support de soutenance
+      </a>
+    </div>
+  </div>
+</section>
 
   <!-- CONTACT -->
   <section id="contact">
@@ -485,6 +511,29 @@
     msg.textContent="Merci "+nom.value.trim().split(" ")[0]+" ! Votre intérêt est bien noté (démo — à relier à un vrai formulaire).";
     form.reset();
   });
+</script>
+<script>
+  function checkPw() {
+    var input = document.getElementById("pwInput").value;
+    var msg   = document.getElementById("pwMsg");
+    var docs  = document.getElementById("docRow");
+    var pw    = document.getElementById("pwZone");
+
+    if (input === "MOTDEPASSE") {
+      docs.style.display = "flex";
+      pw.style.display   = "none";
+      msg.textContent    = "";
+    } else {
+      msg.textContent = "Mot de passe incorrect.";
+      document.getElementById("pwInput").value = "";
+    }
+  }
+
+  // permettre d'appuyer sur Entrée
+  document.getElementById("pwInput")
+    .addEventListener("keydown", function(e) {
+      if (e.key === "Enter") checkPw();
+    });
 </script>
 </body>
 </html>
