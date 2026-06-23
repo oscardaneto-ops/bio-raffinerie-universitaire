@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Espace enseignants — Terreau · Équipe 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#F2EDE1;--ink:#23231A;--ink-soft:#5C5847;--leaf:#3E6B2E;--leaf-deep:#2C5121;
+    --sprout:#9DBE4A;--soil:#23211A;--line:rgba(35,35,26,.14);--r:14px;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--soil);color:var(--paper);font-family:"Inter",sans-serif;
+    min-height:100vh;display:grid;place-items:center;padding:24px;line-height:1.6}
+  .card{width:100%;max-width:560px}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12.5px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--sprout)}
+  h1{font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(32px,6vw,52px);
+    font-weight:800;letter-spacing:-.02em;margin:12px 0 10px}
+  p.sub{color:#d9d3c4;margin-bottom:28px}
+  .gate{display:flex;gap:12px;flex-wrap:wrap;max-width:420px}
+  input{flex:1;min-width:200px;font-family:inherit;font-size:15px;padding:12px 16px;
+    border:1.5px solid rgba(242,237,225,.25);border-radius:999px;
+    background:rgba(242,237,225,.08);color:var(--paper);outline:none}
+  input:focus{border-color:var(--sprout)}
+  button{background:var(--leaf);color:var(--paper);border:0;border-radius:999px;
+    padding:12px 24px;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer}
+  button:hover{background:var(--leaf-deep)}
+  .err{color:#e98a8a;font-size:14px;margin-top:10px;min-height:18px}
+  .docs{display:none;flex-direction:column;gap:12px;margin-top:30px;max-width:480px}
+  .doc{display:flex;align-items:center;gap:11px;background:rgba(242,237,225,.07);
+    border:1px solid rgba(242,237,225,.22);border-radius:12px;padding:14px 20px;
+    text-decoration:none;color:var(--paper);font-weight:500;transition:.2s}
+  .doc:hover{background:var(--leaf);border-color:var(--leaf)}
+  .doc .dot{font-family:"IBM Plex Mono",monospace;color:var(--sprout)}
+  .doc:hover .dot{color:var(--paper)}
+  .back{display:inline-block;margin-top:28px;color:#d9d3c4;font-size:14px;text-decoration:none}
+  .back:hover{color:var(--sprout)}
+</style>
+</head>
+<body>
+  <div class="card">
+    <span class="eyebrow">Espace enseignants</span>
+    <h1>Nos livrables.</h1>
+    <p class="sub">Accès réservé à l'équipe pédagogique. Entrez le mot de passe pour accéder aux documents.</p>
+
+    <div id="gate" class="gate">
+      <input id="pw" type="password" placeholder="Mot de passe enseignant" />
+      <button onclick="check()">Accéder</button>
+    </div>
+    <p id="err" class="err"></p>
+
+    <div id="docs" class="docs">
+      <a class="doc" href="https://drive.google.com/file/d/1IUSuguP3rcdVXyhjX5XMbJNWjPBY8LQa/view?usp=sharing" target="_blank">
+        <span class="dot">01</span> Gestion de projet
+      </a>
+      <a class="doc" href="#" target="_blank"><span class="dot">02</span> Gestion de l'information</a>
+      <a class="doc" href="#" target="_blank"><span class="dot">03</span> Veilles &amp; stratégie</a>
+      <a class="doc" href="#" target="_blank"><span class="dot">04</span> Support de soutenance</a>
+    </div>
+
+    <a class="back" href="index.html">← Retour au site</a>
+  </div>
+
+  <script>
+    function check(){
+      var v = document.getElementById("pw").value;
+      if (v === "MOTDEPASSE") {
+        document.getElementById("docs").style.display = "flex";
+        document.getElementById("gate").style.display = "none";
+        document.getElementById("err").textContent = "";
+      } else {
+        document.getElementById("err").textContent = "Mot de passe incorrect.";
+        document.getElementById("pw").value = "";
+      }
+    }
+    document.getElementById("pw").addEventListener("keydown", function(e){
+      if (e.key === "Enter") check();
+    });
+  </script>
+</body>
+</html>
