@@ -416,15 +416,21 @@
           <span class="mono">equipe1.hackathon@exemple.fr</span>
         </div>
         <div class="reveal">
-          <form id="interestForm" novalidate>
+          <form id="interestForm" action="https://formspree.io/f/mzdlzdqy" method="POST" novalidate>
+
+            <input type="hidden" name="_subject" value="Nouveau message — site Équipe 1 Terreau" />
+            <input type="hidden" name="_next" value="" id="nextUrl" />
+
             <div class="field">
               <label for="nom">Nom</label>
               <input id="nom" name="nom" type="text" autocomplete="name" required />
             </div>
+
             <div class="field">
               <label for="email">Email</label>
               <input id="email" name="email" type="email" autocomplete="email" required />
             </div>
+
             <div class="field">
               <label for="profil">Vous êtes</label>
               <select id="profil" name="profil">
@@ -435,13 +441,20 @@
                 <option>Autre</option>
               </select>
             </div>
+
             <div class="field">
               <label for="message">Votre message</label>
-              <textarea id="message" name="message" placeholder="Ce qui vous intéresse dans le projet…"></textarea>
+              <textarea id="message" name="message"
+                placeholder="Ce qui vous intéresse dans le projet…"></textarea>
             </div>
-            <button class="btn btn-primary" type="submit" style="justify-content:center">Envoyer mon intérêt</button>
+
+            <button class="btn btn-primary" type="submit"
+              style="justify-content:center">
+              Envoyer mon intérêt
+            </button>
+
             <p class="form-msg" id="formMsg" role="status" aria-live="polite"></p>
-          </form>
+          </form> 
         </div>
       </div>
     </div>
@@ -501,15 +514,43 @@
   },{threshold:.14});
   document.querySelectorAll(".reveal").forEach(function(el){obs.observe(el);});
 
-  // --- form (front-end demo only) ---
-  var form=document.getElementById("interestForm"), msg=document.getElementById("formMsg");
-  form.addEventListener("submit",function(e){
+  // --- formulaire Formspree ---
+  var form = document.getElementById("interestForm");
+  var msg  = document.getElementById("formMsg");
+
+  form.addEventListener("submit", function(e) {
     e.preventDefault();
-    var nom=document.getElementById("nom"), email=document.getElementById("email");
-    if(!nom.value.trim()||!email.value.trim()){msg.style.color="#b5481f";msg.textContent="Merci de renseigner votre nom et votre email.";return;}
-    msg.style.color="#3E6B2E";
-    msg.textContent="Merci "+nom.value.trim().split(" ")[0]+" ! Votre intérêt est bien noté (démo — à relier à un vrai formulaire).";
-    form.reset();
+    var nom   = document.getElementById("nom").value.trim();
+    var email = document.getElementById("email").value.trim();
+
+    if (!nom || !email) {
+      msg.style.color = "#b5481f";
+      msg.textContent = "Merci de renseigner votre nom et votre email.";
+      return;
+    }
+
+    msg.style.color = "var(--ink-soft)";
+    msg.textContent = "Envoi en cours…";
+
+    fetch(form.action, {
+      method: "POST",
+      body: new FormData(form),
+      headers: { "Accept": "application/json" }
+    })
+    .then(function(res) {
+      if (res.ok) {
+        msg.style.color = "var(--leaf)";
+        msg.textContent = "Merci " + nom.split(" ")[0] + " ! On a bien reçu votre message.";
+        form.reset();
+      } else {
+        msg.style.color = "#b5481f";
+        msg.textContent = "Une erreur s'est produite. Réessayez ou écrivez-nous directement.";
+      }
+    })
+    .catch(function() {
+      msg.style.color = "#b5481f";
+      msg.textContent = "Pas de connexion. Réessayez dans un moment.";
+    });
   });
 </script>
 <script>
