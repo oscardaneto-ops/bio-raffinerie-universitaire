@@ -17,16 +17,7 @@
   h1{font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(32px,6vw,52px);
     font-weight:800;letter-spacing:-.02em;margin:12px 0 10px}
   p.sub{color:#d9d3c4;margin-bottom:28px}
-  .gate{display:flex;gap:12px;flex-wrap:wrap;max-width:420px}
-  input{flex:1;min-width:200px;font-family:inherit;font-size:15px;padding:12px 16px;
-    border:1.5px solid rgba(242,237,225,.25);border-radius:999px;
-    background:rgba(242,237,225,.08);color:var(--paper);outline:none}
-  input:focus{border-color:var(--sprout)}
-  button{background:var(--leaf);color:var(--paper);border:0;border-radius:999px;
-    padding:12px 24px;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer}
-  button:hover{background:var(--leaf-deep)}
-  .err{color:#e98a8a;font-size:14px;margin-top:10px;min-height:18px}
-  .docs{display:none;flex-direction:column;gap:12px;margin-top:30px;max-width:480px}
+  .docs{display:flex;flex-direction:column;gap:12px;margin-top:8px;max-width:480px}
   .doc{display:flex;align-items:center;gap:11px;background:rgba(242,237,225,.07);
     border:1px solid rgba(242,237,225,.22);border-radius:12px;padding:14px 20px;
     text-decoration:none;color:var(--paper);font-weight:500;transition:.2s}
@@ -41,15 +32,9 @@
   <div class="card">
     <span class="eyebrow">Espace enseignants</span>
     <h1>Nos livrables.</h1>
-    <p class="sub">Accès réservé à l'équipe pédagogique. Entrez le mot de passe pour accéder aux documents.</p>
+    <p class="sub">Accès réservé à l'équipe pédagogique du hackathon.</p>
 
-    <div id="gate" class="gate">
-      <input id="pw" type="password" placeholder="Mot de passe enseignant" />
-      <button onclick="check()">Accéder</button>
-    </div>
-    <p id="err" class="err"></p>
-
-    <div id="docs" class="docs">
+    <div class="docs">
       <a class="doc" href="docs/Livrable1_Gestion_de_projet_Equipe1.pdf" download>
         <span class="dot">01</span> Gestion de projet
       </a>
@@ -62,20 +47,15 @@
   </div>
 
   <script>
-    function check(){
-      var v = document.getElementById("pw").value;
-      if (v === "MOTDEPASSE") {
-        document.getElementById("docs").style.display = "flex";
-        document.getElementById("gate").style.display = "none";
-        document.getElementById("err").textContent = "";
-      } else {
-        document.getElementById("err").textContent = "Mot de passe incorrect.";
-        document.getElementById("pw").value = "";
+    // Garde : on ne peut arriver ici qu'après avoir saisi le bon mot de passe sur l'accueil.
+    // (Sécurité côté client uniquement : suffisante pour un projet, pas infaillible.)
+    try {
+      if (sessionStorage.getItem("teacherOK") !== "1") {
+        window.location.replace("index.html#enseignants");
       }
+    } catch (e) {
+      // si sessionStorage est bloqué, on laisse passer (ex : aperçu local)
     }
-    document.getElementById("pw").addEventListener("keydown", function(e){
-      if (e.key === "Enter") check();
-    });
   </script>
 </body>
 </html>

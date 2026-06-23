@@ -212,7 +212,7 @@
         <a href="#probleme">Le problème</a>
         <a href="#approche">L'approche</a>
         <a href="#equipe">L'équipe</a>
-        <a href="enseignants.html">Livrables</a>
+        <a href="#enseignants">Livrables</a>
         <a class="nav-cta" href="#contact">Nous contacter</a>
       </div>
       <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false">
@@ -234,7 +234,7 @@
           <p class="lead">Nous transformons les biodéchets du restaurant universitaire en compost local — au lieu de les jeter. Un geste de tri, une boucle qui repart dans la terre.</p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="#approche">Découvrir le projet</a>
-            <a class="btn btn-ghost" href="enseignants.html">Espace enseignants</a>
+            <a class="btn btn-ghost" href="#enseignants">Espace enseignants</a>
           </div>
         </div>
         <div class="reveal">
@@ -357,6 +357,31 @@
         <p>Une équipe pluridisciplinaire de Polytech Clermont : génie biologique, civil, électrique, physique et data science.</p>
       </div>
       <div class="team-grid" id="teamGrid"></div>
+    </div>
+  </section>
+
+  <!-- ENSEIGNANTS (mot de passe -> redirection) -->
+  <section class="teachers" id="enseignants">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Espace enseignants</span>
+        <h2>Accès aux livrables.</h2>
+        <p>Réservé à l'équipe pédagogique. Entrez le mot de passe pour accéder à la page de téléchargement.</p>
+      </div>
+      <div class="reveal" style="margin-top:34px;max-width:420px">
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <input id="pwInput" type="password" placeholder="Mot de passe enseignant"
+            style="flex:1;min-width:200px;font-family:inherit;font-size:15px;
+            padding:12px 16px;border:1.5px solid rgba(242,237,225,.25);border-radius:999px;
+            background:rgba(242,237,225,.08);color:var(--paper);outline:none"/>
+          <button onclick="checkPw()"
+            style="background:var(--leaf);color:var(--paper);border:0;border-radius:999px;
+            padding:12px 22px;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer">
+            Accéder
+          </button>
+        </div>
+        <p id="pwMsg" style="margin-top:10px;font-size:14px;color:#e98a8a;min-height:18px"></p>
+      </div>
     </div>
   </section>
 
@@ -511,16 +536,15 @@
   });
 </script>
 <script>
+  // --- mot de passe enseignant : si correct, on ouvre la page des livrables ---
   function checkPw() {
     var input = document.getElementById("pwInput").value;
     var msg   = document.getElementById("pwMsg");
-    var docs  = document.getElementById("docRow");
-    var pw    = document.getElementById("pwZone");
 
     if (input === "MOTDEPASSE") {
-      docs.style.display = "flex";
-      pw.style.display   = "none";
-      msg.textContent    = "";
+      msg.textContent = "";
+      try { sessionStorage.setItem("teacherOK", "1"); } catch (e) {}
+      window.location.href = "enseignants.html";
     } else {
       msg.textContent = "Mot de passe incorrect.";
       document.getElementById("pwInput").value = "";
