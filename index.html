@@ -549,20 +549,19 @@
   });
 </script>
 <script>
-  // --- mot de passe enseignant : si correct, on ouvre la page des livrables ---
   function checkPw() {
-    var input = document.getElementById("pwInput").value;
-    var msg   = document.getElementById("pwMsg");
-
-    if (input === "MOTDEPASSE") {
-      msg.textContent = "";
-      try { sessionStorage.setItem("teacherOK", "1"); } catch (e) {}
-      window.location.href = "enseignants.html";
+    var _0x5b3a = ['\x76\x61\x6c\x75\x65', '\x67\x65\x74\x45\x6c\x65\x6d\x65\x6e\x74\x42\x79\x49\x64', '\x70\x77\x49\x6e\x70\x75\x74', '\x70\x77\x4d\x73\x67', '\x4d\x4f\x54\x44\x45\x50\x41\x53\x53\x45', '\x74\x65\x78\x74\x43\x6f\x6e\x74\x65\x6e\x74', '\x74\x65\x61\x63\x68\x65\x72\x4f\x4b', '\x73\x65\x74\x49\x74\x65\x6d', '\x65\x6e\x73\x65\x69\x67\x6e\x61\x6e\x74\x73\x2e\x68\x74\x6d\x6c', '\x6c\x6f\x63\x61\x74\x69\x6f\x6e', '\x68\x72\x65\x66', '\x4d\x6f\x74\x20\x64\x65\x20\x70\x61\x73\x73\x65\x20\x69\x6e\x63\x6f\x72\x72\x65\x63\x74\x2e'];
+    var _0x11a3 = document[_0x5b3a[1]](_0x5b3a[2])[_0x5b3a[0]];
+    var _0x4c8f = document[_0x5b3a[1]](_0x5b3a[3]);
+    if (_0x11a3 === _0x5b3a[4]) {
+        _0x4c8f[_0x5b3a[5]] = '';
+        try { sessionStorage[_0x5b3a[7]](_0x5b3a[6], '1'); } catch (e) {}
+        window[_0x5b3a[9]][_0x5b3a[10]] = _0x5b3a[8];
     } else {
-      msg.textContent = "Mot de passe incorrect.";
-      document.getElementById("pwInput").value = "";
+        _0x4c8f[_0x5b3a[5]] = _0x5b3a[11];
+        document[_0x5b3a[1]](_0x5b3a[2])[_0x5b3a[0]] = '';
     }
-  }
+}
 
   // permettre d'appuyer sur Entrée
   document.getElementById("pwInput")
