@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Visionneuse 3D <model-viewer> de Google (affiche les fichiers .glb / .gltf) -->
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.3.0/dist/model-viewer.min.js"></script>
 <style>
   :root{
     --paper:#F2EDE1;
@@ -166,6 +168,49 @@
   .foot-note{font-size:13.5px;color:var(--ink-soft);max-width:48ch}
   .foot-meta{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft);margin-top:22px}
 
+  /* ---------- VISIONNEUSE 3D ---------- */
+  .viewer-wrap{
+    margin-top:42px;
+    border:1px solid var(--line);
+    border-radius:var(--r);
+    background:radial-gradient(120% 120% at 50% 18%, #FFFDF7 0%, var(--paper-2) 78%);
+    overflow:hidden;position:relative;
+  }
+  model-viewer{
+    width:100%;
+    height:clamp(360px,56vh,560px);
+    background:transparent;
+    --poster-color:transparent;
+    --progress-bar-color:var(--leaf);
+    --progress-mask:transparent;
+  }
+  /* étiquette discrète en haut à gauche de la scène */
+  .viewer-badge{
+    position:absolute;top:14px;left:16px;z-index:2;pointer-events:none;
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--leaf);
+    background:rgba(242,237,225,.7);backdrop-filter:blur(4px);
+    border:1px solid var(--line);border-radius:999px;padding:5px 11px;
+  }
+  /* bouton réalité augmentée (mobile) */
+  .ar-btn{
+    position:absolute;left:50%;bottom:18px;transform:translateX(-50%);
+    background:var(--leaf);color:var(--paper);border:0;border-radius:999px;
+    padding:11px 20px;font-family:inherit;font-weight:600;font-size:14.5px;cursor:pointer;
+    box-shadow:0 4px 14px rgba(35,33,26,.18)
+  }
+  .ar-btn:hover{background:var(--leaf-deep)}
+  /* message si le modèle ne charge pas */
+  .viewer-error{
+    position:absolute;inset:0;display:none;place-items:center;text-align:center;padding:24px;
+    color:var(--ink-soft);font-size:14.5px
+  }
+  model-viewer[data-failed] .viewer-error{display:grid}
+  .viewer-hint{
+    text-align:center;color:var(--ink-soft);font-size:12.5px;
+    letter-spacing:.04em;margin-top:16px
+  }
+
   /* reveal */
   .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
   .reveal.in{opacity:1;transform:none}
@@ -221,6 +266,7 @@
       <div class="nav-links" id="navLinks">
         <a href="#probleme">Le problème</a>
         <a href="#approche">L'approche</a>
+        <a href="#prototype">Le prototype</a>
         <a href="#equipe">L'équipe</a>
         <a href="#enseignants">Livrables</a>
         <a class="nav-cta" href="#contact">Nous contacter</a>
@@ -327,6 +373,50 @@
         </svg>
         <span>Le détail de notre procédé de valorisation reste confidentiel à ce stade du projet. Nous partageons la promesse et la démarche, pas les éléments techniques sensibles.</span>
       </div>
+    </div>
+  </section>
+
+  <!-- VISUALISATION 3D -->
+  <section id="prototype">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">En 3D</span>
+        <h2>Notre prototype, sous tous les angles.</h2>
+        <p>Faites tourner le modèle, zoomez, explorez chaque détail. Glissez pour pivoter, molette ou pincement pour zoomer — et sur mobile, visualisez-le en taille réelle directement chez vous.</p>
+      </div>
+
+      <div class="viewer-wrap reveal">
+        <span class="viewer-badge">Modèle&#160;3D · prototype</span>
+        <model-viewer
+          src="modele.glb"
+          alt="Modèle 3D du prototype Céz'0'déchet"
+          camera-controls
+          touch-action="pan-y"
+          auto-rotate
+          auto-rotate-delay="600"
+          rotation-per-second="22deg"
+          interaction-prompt="auto"
+          shadow-intensity="1"
+          shadow-softness="0.8"
+          exposure="1.05"
+          environment-image="neutral"
+          camera-orbit="35deg 75deg auto"
+          min-camera-orbit="auto auto auto"
+          max-camera-orbit="auto auto auto"
+          loading="lazy"
+          reveal="auto"
+          ar
+          ar-modes="webxr scene-viewer quick-look"
+        >
+          <button slot="ar-button" class="ar-btn">Voir en réalité augmentée</button>
+          <div class="viewer-error">
+            Impossible de charger le modèle 3D.<br>
+            Vérifiez que le fichier <span class="mono">modele.glb</span> se trouve bien à côté de cette page.
+          </div>
+        </model-viewer>
+      </div>
+
+      <p class="viewer-hint mono reveal">Glisser pour pivoter · molette pour zoomer · double-clic pour recentrer</p>
     </div>
   </section>
 
@@ -502,6 +592,13 @@
     entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add("in");obs.unobserve(en.target);}});
   },{threshold:.14});
   document.querySelectorAll(".reveal").forEach(function(el){obs.observe(el);});
+
+  // --- visionneuse 3D : afficher un message si le .glb ne charge pas ---
+  var mv = document.querySelector("model-viewer");
+  if (mv) {
+    mv.addEventListener("error", function(){ mv.setAttribute("data-failed",""); });
+    mv.addEventListener("load",  function(){ mv.removeAttribute("data-failed"); });
+  }
 
   // --- formulaire Formspree ---
   var form = document.getElementById("interestForm");
